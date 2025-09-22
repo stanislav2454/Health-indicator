@@ -366,7 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe82e19f2a91dba45b952afd5c05b44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthComponent: {fileID: 1610851454}
+  _health: {fileID: 1610851454}
   _damageButton: {fileID: 131672205}
   _healButton: {fileID: 1935549743}
   _killButton: {fileID: 1987070070}
@@ -397,7 +397,15 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 406123869207811593, guid: e4b991f5a09ad814d830b07212b4a3cd, type: 3}
+      propertyPath: Health
+      value: 
+      objectReference: {fileID: 1610851454}
+    - target: {fileID: 406123869207811593, guid: e4b991f5a09ad814d830b07212b4a3cd, type: 3}
       propertyPath: _healthComponent
+      value: 
+      objectReference: {fileID: 1610851454}
+    - target: {fileID: 661498965938178888, guid: e4b991f5a09ad814d830b07212b4a3cd, type: 3}
+      propertyPath: Health
       value: 
       objectReference: {fileID: 1610851454}
     - target: {fileID: 661498965938178888, guid: e4b991f5a09ad814d830b07212b4a3cd, type: 3}
@@ -488,6 +496,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6699528240868770460, guid: e4b991f5a09ad814d830b07212b4a3cd, type: 3}
+      propertyPath: Health
+      value: 
+      objectReference: {fileID: 1610851454}
     - target: {fileID: 6699528240868770460, guid: e4b991f5a09ad814d830b07212b4a3cd, type: 3}
       propertyPath: _healthComponent
       value: 
