@@ -24,30 +24,4 @@ public class HealthTester : MonoBehaviour
                 button.Initialize(_health);
         }
     }
-
-    public void RegisterButton(HealthButton button)
-    {
-        if (button != null && !_healthButtons.Contains(button))
-        {
-            _healthButtons.Add(button);
-            button.Initialize(_health);
-        }
-    }
-
-    public void UnregisterButton(HealthButton button)
-    {
-        if (button != null && _healthButtons.Contains(button))
-            _healthButtons.Remove(button);
-    }
-
-    public void SetTargetHealth(Health newTarget)
-    {
-        _health = newTarget;
-
-        foreach (var button in _healthButtons)
-        {
-            if (button != null)
-                button.Initialize(newTarget);
-        }
-    }
 }
