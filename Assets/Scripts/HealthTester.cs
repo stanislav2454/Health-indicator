@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class HealthTester : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private HealthComponent _healthComponent;
+    [SerializeField] private Health _health;
     [SerializeField] private Button _damageButton;
     [SerializeField] private Button _healButton;
     [SerializeField] private Button _killButton;
@@ -42,16 +42,16 @@ public class HealthTester : MonoBehaviour
     }
 
     private void ApplyDamage() =>
-        _healthComponent?.TakeDamage(_damageAmount);
+        _health?.TakeDamage(_damageAmount);
 
     private void ApplyHeal() =>
-        _healthComponent?.Heal(_healAmount);
+        _health?.Heal(_healAmount);
 
     private void Kill() =>
-        _healthComponent?.Die();
+        _health?.Die();
 
     private void Revive() =>
-        _healthComponent?.Revive();
+        _health?.Revive();
 
     private void RemoveButtonListener(Button button, UnityEngine.Events.UnityAction action)
     {

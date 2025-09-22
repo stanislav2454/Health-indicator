@@ -31,10 +31,10 @@ public class BarHealthVisualizer : HealthVisualizer
 
     protected override void UpdateVisualization()
     {
-        if (_healthSlider == null || _healthComponent == null)
+        if (_healthSlider == null || Health == null)
             return;
 
-        _healthSlider.value = _healthComponent.GetHealthNormalized();
+        _healthSlider.value = Health.GetNormalized();
         UpdateBarColor();
     }
 
@@ -43,7 +43,7 @@ public class BarHealthVisualizer : HealthVisualizer
         if (_fillImage == null)
             return;
 
-        float healthNormalized = _healthComponent.GetHealthNormalized();
+        float healthNormalized = Health.GetNormalized();
         _fillImage.color = Color.Lerp(_lowHealthColor, _fullHealthColor, healthNormalized);
     }
 }

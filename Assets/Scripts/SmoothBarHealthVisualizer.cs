@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class SmoothBarHealthVisualizer : BarHealthVisualizer
 {
@@ -8,35 +9,73 @@ public class SmoothBarHealthVisualizer : BarHealthVisualizer
     [SerializeField] private float _smoothSpeed = 2f;
 
     private float _targetValue;
-    private bool _isAnimating;
+    private Coroutine _smoothCoroutine;
 
     protected override void Start()
     {
         base.Start();
-        _targetValue = _healthComponent != null ? _healthComponent.GetHealthNormalized() : DefaultValue;
-    }
+        _targetValue = Health != null ? Health.GetNormalized() : DefaultValue;
 
-    private void Update()
-    {
-        if (_isAnimating == false || _healthSlider == null)
-            return;
-
-        _healthSlider.value = Mathf.MoveTowards(
-            _healthSlider.value,
-            _targetValue,
-            _smoothSpeed * Time.deltaTime);
-
-        if (Mathf.Approximately(_healthSlider.value, _targetValue))
-            _isAnimating = false;
+        if (_healthSlider != null)
+            _healthSlider.value = _targetValue;
     }
 
     protected override void UpdateVisualization()
     {
-        if (_healthComponent == null)
+        if (Health == null)
             return;
 
-        _targetValue = _healthComponent.GetHealthNormalized();
-        _isAnimating = true;
-        UpdateBarColor();
+        _targetValue = Health.GetNormalized();
+        UpdateBarColor(); 
+
+        StartSmoothAnimation();
+    }
+
+    private void StartSmoothAnimation()
+    {
+        if (_smoothCoroutine != null)
+        {
+            StopCoroutine(_smoothCoroutine);
+        }
+
+        _smoothCoroutine = StartCoroutine(SmoothAnimationRoutine());
+    }
+
+    private IEnumerator SmoothAnimationRoutine()
+    {
+        if (_healthSlider == null)
+            yield break;
+
+        while (Mathf.Approximately(_healthSlider.value, _targetValue) == false)
+        {
+            _healthSlider.value = Mathf.MoveTowards(
+                _healthSlider.value,
+                _targetValue,
+                _smoothSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        _healthSlider.value = _targetValue;
+        _smoothCoroutine = null;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (_smoothCoroutine != null)
+        {
+            StopCoroutine(_smoothCoroutine);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_smoothCoroutine != null)
+        {
+            StopCoroutine(_smoothCoroutine);
+            _smoothCoroutine = null;
+        }
     }
 }

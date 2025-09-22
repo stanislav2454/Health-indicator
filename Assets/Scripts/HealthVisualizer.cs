@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class HealthVisualizer : MonoBehaviour
 {
     [Header("Health Reference")]
-    [SerializeField] protected HealthComponent _healthComponent;
+    [SerializeField] protected Health Health;
 
     protected virtual void Start()
     {
@@ -19,33 +19,33 @@ public abstract class HealthVisualizer : MonoBehaviour
 
     protected virtual void TryFindHealthComponent()
     {
-        if (_healthComponent == null)
-            _healthComponent = GetComponentInParent<HealthComponent>();
+        if (Health == null)
+            Health = GetComponentInParent<Health>();
 
-        if (_healthComponent == null)
+        if (Health == null)
             Debug.LogWarning($"HealthComponent not found for {GetType().Name} on {gameObject.name}", this);
     }
 
     protected virtual void SubscribeToEvents()
     {
-        if (_healthComponent == null) 
+        if (Health == null) 
             return;
 
-        _healthComponent.HealthChanged += HandleHealthChanged;
-        _healthComponent.MaxHealthChanged += HandleMaxHealthChanged;
-        _healthComponent.Died += HandleDeath;
-        _healthComponent.Revived += HandleRevive;
+        Health.HealthChanged += HandleHealthChanged;
+        Health.MaxHealthChanged += HandleMaxHealthChanged;
+        Health.Died += HandleDeath;
+        Health.Revived += HandleRevive;
     }
 
     protected virtual void UnsubscribeFromEvents()
     {
-        if (_healthComponent == null) 
+        if (Health == null) 
             return;
 
-        _healthComponent.HealthChanged -= HandleHealthChanged;
-        _healthComponent.MaxHealthChanged -= HandleMaxHealthChanged;
-        _healthComponent.Died -= HandleDeath;
-        _healthComponent.Revived -= HandleRevive;
+        Health.HealthChanged -= HandleHealthChanged;
+        Health.MaxHealthChanged -= HandleMaxHealthChanged;
+        Health.Died -= HandleDeath;
+        Health.Revived -= HandleRevive;
     }
 
     protected virtual void HandleHealthChanged(int current, int max) => 

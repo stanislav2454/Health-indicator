@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class HealthComponent : MonoBehaviour, IHealthProvider
+public class Health : MonoBehaviour, IHealthProvider
 {
     private const int MinHealth = 0;
     private const int MinHealAmount = 0;
@@ -42,7 +42,7 @@ public class HealthComponent : MonoBehaviour, IHealthProvider
         HealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 
-    public virtual void SetMaxHealth(int newMaxHealth, bool healToFull = false)
+    public virtual void SetMax(int newMaxHealth, bool healToFull = false)
     {
         _maxHealth = Mathf.Max(MinAllowedMaxHealth, newMaxHealth);
 
@@ -76,7 +76,7 @@ public class HealthComponent : MonoBehaviour, IHealthProvider
         HealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 
-    public float GetHealthNormalized() =>
+    public float GetNormalized() =>
         (float)_currentHealth / _maxHealth;
 
     protected virtual void OnValidate()
