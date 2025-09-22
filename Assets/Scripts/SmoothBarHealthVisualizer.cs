@@ -5,8 +5,7 @@ public class SmoothBarHealthVisualizer : BarHealthVisualizer
 {
     private const float DefaultValue = 0f;
 
-    [Header("Smooth Settings")]
-    [SerializeField] private float _smoothSpeed = 2f;
+    [SerializeField] private float _smoothSpeed = 0.2f;
 
     private float _targetValue;
     private Coroutine _smoothCoroutine;
@@ -14,19 +13,19 @@ public class SmoothBarHealthVisualizer : BarHealthVisualizer
     protected override void Start()
     {
         base.Start();
-        _targetValue = Health != null ? Health.GetNormalized() : DefaultValue;
+        _targetValue = Health?.Normalized ?? DefaultValue;
 
-        if (_healthSlider != null)
-            _healthSlider.value = _targetValue;
+        if (_slider != null)
+            _slider.value = _targetValue;
     }
 
-    protected override void UpdateVisualization()
+    protected override void UpdateDisplay()
     {
         if (Health == null)
             return;
 
-        _targetValue = Health.GetNormalized();
-        UpdateBarColor(); 
+        _targetValue = Health.Normalized;
+        UpdateColor();
 
         StartSmoothAnimation();
     }
@@ -34,40 +33,36 @@ public class SmoothBarHealthVisualizer : BarHealthVisualizer
     private void StartSmoothAnimation()
     {
         if (_smoothCoroutine != null)
-        {
             StopCoroutine(_smoothCoroutine);
-        }
 
         _smoothCoroutine = StartCoroutine(SmoothAnimationRoutine());
     }
 
     private IEnumerator SmoothAnimationRoutine()
     {
-        if (_healthSlider == null)
+        if (_slider == null)
             yield break;
 
-        while (Mathf.Approximately(_healthSlider.value, _targetValue) == false)
+        while (Mathf.Approximately(_slider.value, _targetValue) == false)
         {
-            _healthSlider.value = Mathf.MoveTowards(
-                _healthSlider.value,
+            _slider.value = Mathf.MoveTowards(
+                _slider.value,
                 _targetValue,
                 _smoothSpeed * Time.deltaTime);
 
             yield return null;
         }
 
-        _healthSlider.value = _targetValue;
+        _slider.value = _targetValue;
         _smoothCoroutine = null;
     }
 
     protected override void OnDestroy()
     {
-        base.OnDestroy();
-
         if (_smoothCoroutine != null)
-        {
             StopCoroutine(_smoothCoroutine);
-        }
+
+        base.OnDestroy();
     }
 
     private void OnDisable()

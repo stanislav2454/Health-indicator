@@ -1,14 +1,11 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class HealthTester : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Health _health;
-    [SerializeField] private Button _damageButton;
-    [SerializeField] private Button _healButton;
-    [SerializeField] private Button _killButton;
-    [SerializeField] private Button _reviveButton;
+    [SerializeField] private List<HealthButton> _healthButtons = new List<HealthButton>();
 
     [Header("Test Settings")]
     [SerializeField] private int _damageAmount = 10;
@@ -16,46 +13,41 @@ public class HealthTester : MonoBehaviour
 
     private void Start()
     {
-        SetupButtons();
+        InitializeButtons();
     }
 
-    private void OnDestroy()
+    private void InitializeButtons()
     {
-        RemoveButtonListener(_damageButton, ApplyDamage);
-        RemoveButtonListener(_healButton, ApplyHeal);
-        RemoveButtonListener(_killButton, Kill);
-        RemoveButtonListener(_reviveButton, Revive);
+        foreach (var button in _healthButtons)
+        {
+            if (button != null)
+                button.Initialize(_health);
+        }
     }
 
-    private void SetupButtons()
+    public void RegisterButton(HealthButton button)
     {
-        AddButtonListener(_damageButton, ApplyDamage);
-        AddButtonListener(_healButton, ApplyHeal);
-        AddButtonListener(_killButton, Kill);
-        AddButtonListener(_reviveButton, Revive);
+        if (button != null && !_healthButtons.Contains(button))
+        {
+            _healthButtons.Add(button);
+            button.Initialize(_health);
+        }
     }
 
-    private void AddButtonListener(Button button, UnityEngine.Events.UnityAction action)
+    public void UnregisterButton(HealthButton button)
     {
-        if (button != null)
-            button.onClick.AddListener(action);
+        if (button != null && _healthButtons.Contains(button))
+            _healthButtons.Remove(button);
     }
 
-    private void ApplyDamage() =>
-        _health?.TakeDamage(_damageAmount);
-
-    private void ApplyHeal() =>
-        _health?.Heal(_healAmount);
-
-    private void Kill() =>
-        _health?.Die();
-
-    private void Revive() =>
-        _health?.Revive();
-
-    private void RemoveButtonListener(Button button, UnityEngine.Events.UnityAction action)
+    public void SetTargetHealth(Health newTarget)
     {
-        if (button != null)
-            button.onClick.RemoveListener(action);
+        _health = newTarget;
+
+        foreach (var button in _healthButtons)
+        {
+            if (button != null)
+                button.Initialize(newTarget);
+        }
     }
 }

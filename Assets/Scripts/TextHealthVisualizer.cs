@@ -4,27 +4,21 @@ using UnityEngine;
 public class TextHealthVisualizer : HealthVisualizer
 {
     [Header("Text Settings")]
-    [SerializeField] private TMP_Text _healthText;
+    [SerializeField] private TMP_Text _text;
     [SerializeField] private string _format = "{0}/{1}";
     [SerializeField] private bool _showMaxHealth = true;
-    [SerializeField] private Color _normalColor = Color.white;
+    [SerializeField] private Color _normalHealthColor = Color.white;
     [SerializeField] private Color _lowHealthColor = Color.red;
     [SerializeField] private float _lowHealthThreshold = 0.3f;
 
-    protected override void UpdateVisualization()
+    protected override void UpdateDisplay()
     {
-        if (_healthText == null || Health == null)
+        if (_text == null || Health == null)
             return;
 
-        string text = _showMaxHealth
-            ? string.Format(_format, Health.CurrentHealth, Health.MaxHealth)
-            : Health.CurrentHealth.ToString();
+        _text.text = _showMaxHealth
+            ? string.Format(_format, Health.Current, Health.Max) : Health.Current.ToString();
 
-        _healthText.text = text;
-
-        if (Health.GetNormalized() <= _lowHealthThreshold)
-            _healthText.color = _lowHealthColor;
-        else
-            _healthText.color = _normalColor;
+        _text.color = Health.Normalized <= _lowHealthThreshold ? _lowHealthColor : _normalHealthColor;
     }
 }

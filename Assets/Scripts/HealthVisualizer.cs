@@ -9,7 +9,7 @@ public abstract class HealthVisualizer : MonoBehaviour
     {
         TryFindHealthComponent();
         SubscribeToEvents();
-        UpdateVisualization();
+        UpdateDisplay();
     }
 
     protected virtual void OnDestroy()
@@ -31,8 +31,8 @@ public abstract class HealthVisualizer : MonoBehaviour
         if (Health == null) 
             return;
 
-        Health.HealthChanged += HandleHealthChanged;
-        Health.MaxHealthChanged += HandleMaxHealthChanged;
+        Health.Changed += HandleHealthChanged;
+        Health.MaxChanged += HandleMaxHealthChanged;
         Health.Died += HandleDeath;
         Health.Revived += HandleRevive;
     }
@@ -42,23 +42,23 @@ public abstract class HealthVisualizer : MonoBehaviour
         if (Health == null) 
             return;
 
-        Health.HealthChanged -= HandleHealthChanged;
-        Health.MaxHealthChanged -= HandleMaxHealthChanged;
+        Health.Changed -= HandleHealthChanged;
+        Health.MaxChanged -= HandleMaxHealthChanged;
         Health.Died -= HandleDeath;
         Health.Revived -= HandleRevive;
     }
 
     protected virtual void HandleHealthChanged(int current, int max) => 
-        UpdateVisualization();
+        UpdateDisplay();
 
     protected virtual void HandleMaxHealthChanged(int current, int max) => 
-        UpdateVisualization();
+        UpdateDisplay();
 
     protected virtual void HandleDeath() => 
-        UpdateVisualization();
+        UpdateDisplay();
 
     protected virtual void HandleRevive() => 
-        UpdateVisualization();
+        UpdateDisplay();
 
-    protected abstract void UpdateVisualization();
+    protected abstract void UpdateDisplay();
 }
